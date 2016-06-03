@@ -11,6 +11,7 @@ class Game < ActiveRecord::Base
     :open,
     :in_progress,
     :expired,
+    :abandoned,
     :tied,
     :won
   ]
@@ -31,6 +32,10 @@ class Game < ActiveRecord::Base
 
   def player_two
     user_games.where(player_one: false).first.try(:user)
+  end
+
+  def user_is_player?(user)
+    users.include? user
   end
 
   private 

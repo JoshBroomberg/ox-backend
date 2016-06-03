@@ -4,7 +4,7 @@ class UserGame < ActiveRecord::Base
 
   after_create :setup_player_one
 
-  validates_uniqueness_of :user_id, scope: [:game_id, :player_one]
+  validates_uniqueness_of :player_one, scope: :game_id
 
   def setup_player_one
     # Could randomise.
