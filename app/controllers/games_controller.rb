@@ -15,4 +15,17 @@ class GamesController < ApplicationController
     )
     render json: game.to_json
   end
+
+  def show
+    game = Game.find_by(id: params[:id])
+    if game
+      if game.users.include? current_user
+        render json: game.to_json
+      else
+        render json: {error: "access denied"}, status: 403
+      end
+    else
+      render json: {error: "board not found"}, status: 404
+    end
+  end
 end
