@@ -9,24 +9,19 @@ class Game < ActiveRecord::Base
 
   enum state: [
     :open,
+    :in_progress,
     :expired,
     :tied,
     :won
   ]
   
   def to_json
-
-    # Jbuilder.new do |game|
-    #   game.board board
-    #   game.state state
-    #   game.player_one player_one
-    #   game.player_two player_two
-    # end.target!
     {
+      id: id,
       board: board,
       state: state,
-      player_one: player_one,
-      player_two: player_two
+      host_user: player_one,
+      guest_user: player_two
     }
   end
 
@@ -41,7 +36,7 @@ class Game < ActiveRecord::Base
   private 
 
   def setup_board
-    self.update!(board: "_________")
+    self.update!(board: "_________", state: :open)
   end
 
   def board_array
