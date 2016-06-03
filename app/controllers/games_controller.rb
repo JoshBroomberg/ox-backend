@@ -3,7 +3,7 @@ class GamesController < ApplicationController
   respond_to :json
   
   def index
-    render json: current_user.games.open.map(&:to_json)
+    render json: Game.open.map(&:to_json)
   end
 
   def create
@@ -54,8 +54,12 @@ class GamesController < ApplicationController
     game = Game.find_by(id: params[:id])
     if game
       if game.user_is_player? current_user
-        game.update!(board: params[:board])
-        render json: game.to_json
+        if game.valid_move?(params[:board])
+          game.update!(board: params[:board])
+          render json: game.to_json
+        else
+          invalid_move
+        end
       else
         access_denied
       end
@@ -79,6 +83,10 @@ class GamesController < ApplicationController
   end
 
   private
+
+  def invalid_move
+    render json: {error: "invalid move"}, status: 422
+  end
 
   def access_denied
     render json: {error: "access denied"}, status: 403
