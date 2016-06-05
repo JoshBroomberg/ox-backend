@@ -3,6 +3,6 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable
   include DeviseTokenAuth::Concerns::User
 
-  has_many :user_games
+  has_many :user_games, dependent: :destroy
   has_many :games, through: :user_games
 end

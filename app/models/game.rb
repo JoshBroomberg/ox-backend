@@ -13,7 +13,8 @@ class Game < ActiveRecord::Base
     :expired,
     :abandoned,
     :tied,
-    :won
+    :x_win,
+    :o_win
   ]
   
   def to_json
@@ -49,15 +50,53 @@ class Game < ActiveRecord::Base
         changes += 1
         return false if value == "x" || value == "o"
         return false unless new_board[index] == "x" || new_board[index] == "o"
-        if xs > os
-          return false if new_board[index] == "x"
-        elsif xs == os
-          return false if new_board[index] == "o"
-        end
+        return false unless current_player == new_board[index]
       end
       return false if changes > 1
     end
     true
+  end
+
+  def current_player
+    xs = board_array.count("x")
+    os = board_array.count("o")
+    return "o" if xs > os
+    return "x"
+  end
+
+  def check_for_win
+    win = false
+    wins = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6]
+    ]
+    wins.each do |line|
+      values = []
+      line.each { |t| values << board_array[t]}
+      win = true and break if values.uniq.count == 1 && values.uniq != ["_"]
+    end
+
+    if !win && board_array.count("_") == 0
+      update(state: :tied)
+    end
+
+    if win
+      xs = board_array.count("x")
+      os = board_array.count("o")
+      
+      if current_player == "o"
+        update(state: :x_win)
+      else
+        update(state: :o_win)
+      end
+    end
+    win
   end
 
   private 

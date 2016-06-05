@@ -8,6 +8,6 @@ class UserGame < ActiveRecord::Base
 
   def setup_player_one
     # Could randomise.
-    self.update!(player_one: true)
+    self.update!(player_one: true) if player_one == nil
   end
 end
