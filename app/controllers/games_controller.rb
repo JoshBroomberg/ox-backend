@@ -54,7 +54,7 @@ class GamesController < ApplicationController
   def update
     game = Game.find_by(id: params[:id])
     if game
-      if game.user_is_player?(current_user) && game.open?
+      if game.user_is_player?(current_user) && game.in_progress?
         if game.valid_move?(params[:board])
           game.update!(board: params[:board])
           game.check_for_win
