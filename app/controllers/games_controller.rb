@@ -64,7 +64,6 @@ class GamesController < ApplicationController
           invalid_move
         end
       else
-        #render json: game.users.include?(current_user)
         access_denied
       end
     else
