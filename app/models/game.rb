@@ -39,7 +39,7 @@ class Game < ActiveRecord::Base
     users.include? user
   end
 
-  def valid_move?(new_board)
+  def valid_move?(new_board, expected_move)
     return false unless new_board.length == 9
     changes = 0
     xs = board_array.count("x")
@@ -48,9 +48,14 @@ class Game < ActiveRecord::Base
     board_array.each_with_index do |value, index|
       if value != new_board[index]
         changes += 1
+        # Replacing existing move.
         return false if value == "x" || value == "o"
+        # Must be an x or an o
         return false unless new_board[index] == "x" || new_board[index] == "o"
+        # Must match current_player value
         return false unless current_player == new_board[index]
+        # Must match expected value from controller
+        return false unless new_board[index] == expected_move
       end
       return false if changes > 1
     end

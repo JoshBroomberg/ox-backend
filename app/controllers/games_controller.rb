@@ -55,7 +55,8 @@ class GamesController < ApplicationController
     game = Game.find_by(id: params[:id])
     if game
       if game.user_is_player?(current_user) && game.in_progress?
-        if game.valid_move?(params[:board])
+        expected_move = game.player_one == current_user ? "x" : "o"
+        if game.valid_move?(params[:board], expected_move)
           game.update!(board: params[:board])
           game.check_for_win
           render json: game.to_json
