@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   
   
   resources :users, only: [:index]
-  put "/users" => "users#update"
+  put "/user" => "users#update"
   get "/user" => "users#show"
   resources :games, only: [:index, :create, :show, :update, :destroy]
   get "games/:id/join" => "games#join_game"
