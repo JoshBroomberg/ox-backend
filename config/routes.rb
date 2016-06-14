@@ -1,9 +1,13 @@
 Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'auth'
   
+  
+  resources :users, only: [:index]
+  put "/users" => "users#update"
+  get "/user" => "users#show"
   resources :games, only: [:index, :create, :show, :update, :destroy]
-  resources :users, only: [:index, :update]
   get "games/:id/join" => "games#join_game"
+
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

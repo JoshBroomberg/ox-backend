@@ -5,4 +5,12 @@ class User < ActiveRecord::Base
 
   has_many :user_games, dependent: :destroy
   has_many :games, through: :user_games
+
+  after_create :set_image
+
+  private
+
+  def set_image
+    self.update!(image: "http://www.nanigans.com/wp-content/uploads/2014/07/Generic-Avatar.png")
+  end
 end
