@@ -74,7 +74,7 @@ class GamesController < ApplicationController
   def destroy
     game = Game.find_by(id: params[:id])
     if game
-      if game.user_is_player?(current_user) && game.in_progress?
+      if game.user_is_player?(current_user) && (game.in_progress? || game.open?)
         game.update!(state: :abandoned)
         render json: game.to_json
       else
